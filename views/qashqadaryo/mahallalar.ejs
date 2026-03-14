@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Qashqadaryo mahallalari</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        .navbar {
+            background: white;
+            padding: 20px 0;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            color: #2E7D32;
+            text-decoration: none;
+        }
+        
+        .logo i {
+            color: #4CAF50;
+            margin-right: 10px;
+        }
+        
+        .nav-links a {
+            margin-left: 30px;
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+        }
+        
+        .page-header {
+            background: linear-gradient(135deg, #1B5E20, #4CAF50);
+            color: white;
+            padding: 60px 0;
+            text-align: center;
+        }
+        
+        .page-header h1 {
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+        
+        .search-box {
+            max-width: 600px;
+            margin: 30px auto 0;
+            display: flex;
+            gap: 10px;
+        }
+        
+        .search-box input {
+            flex: 1;
+            padding: 15px 20px;
+            border: none;
+            border-radius: 50px;
+            font-size: 16px;
+        }
+        
+        .search-box button {
+            padding: 15px 40px;
+            background: #ff5722;
+            color: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        
+        .stats-bar {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            margin: 40px 0;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            text-align: center;
+        }
+        
+        .stat-item {
+            padding: 20px;
+        }
+        
+        .stat-number {
+            font-size: 36px;
+            font-weight: 700;
+            color: #1B5E20;
+        }
+        
+        .stat-label {
+            color: #666;
+        }
+        
+        .tuman-filter {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 30px 0;
+            justify-content: center;
+        }
+        
+        .filter-btn {
+            padding: 10px 25px;
+            border: 2px solid #4CAF50;
+            background: white;
+            color: #4CAF50;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+        
+        .filter-btn:hover,
+        .filter-btn.active {
+            background: #4CAF50;
+            color: white;
+        }
+        
+        .mahallalar-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 25px;
+            margin: 40px 0;
+        }
+        
+        .mahalla-card {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: 0.3s;
+            cursor: pointer;
+            border-left: 5px solid #4CAF50;
+        }
+        
+        .mahalla-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+        }
+        
+        .mahalla-nomi {
+            font-size: 20px;
+            font-weight: 700;
+            color: #1B5E20;
+            margin-bottom: 15px;
+        }
+        
+        .mahalla-info {
+            margin: 10px 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #666;
+        }
+        
+        .mahalla-info i {
+            width: 20px;
+            color: #4CAF50;
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 5px 12px;
+            background: #E8F5E9;
+            color: #2E7D32;
+            border-radius: 50px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-right: 5px;
+        }
+        
+        .pagination {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 40px 0;
+        }
+        
+        .page-btn {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid #4CAF50;
+            border-radius: 10px;
+            color: #4CAF50;
+            text-decoration: none;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+        
+        .page-btn:hover,
+        .page-btn.active {
+            background: #4CAF50;
+            color: white;
+        }
+        
+        .footer {
+            background: #1B5E20;
+            color: white;
+            padding: 40px 0;
+            margin-top: 60px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <div class="navbar">
+        <div class="container nav-container">
+            <a href="/" class="logo">
+                <i class="fas fa-map-marked-alt"></i>
+                Qashqadaryo MFY
+            </a>
+            <div class="nav-links">
+                <a href="/">Bosh sahifa</a>
+                <a href="/qashqadaryo/mahallalar">Mahallalar</a>
+                <a href="/qashqadaryo/xizmatlar">24/7 Xizmatlar</a>
+                <a href="/faollar/login">Faollar</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Page Header -->
+    <section class="page-header">
+        <div class="container">
+            <h1>
+                <i class="fas fa-home me-3"></i>
+                Qashqadaryo mahallalari
+            </h1>
+            <p>Viloyatimizdagi barcha mahallalar va 24/7 xizmatlar</p>
+            
+            <form class="search-box" action="/qashqadaryo/qidiruv" method="GET">
+                <input type="text" name="q" placeholder="Mahalla nomini kiriting...">
+                <button type="submit">
+                    <i class="fas fa-search me-2"></i>Qidirish
+                </button>
+            </form>
+        </div>
+    </section>
+
+    <div class="container">
+        <!-- Statistika -->
+        <div class="stats-bar">
+            <div class="stat-item">
+                <div class="stat-number">558</div>
+                <div class="stat-label">Jami mahallalar</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">15</div>
+                <div class="stat-label">Tumanlar</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">124</div>
+                <div class="stat-label">24/7 Xizmatlar</div>
+            </div>
+        </div>
+
+        <!-- Tuman filter -->
+        <div class="tuman-filter">
+            <button class="filter-btn active" onclick="filterTuman('all')">Barchasi</button>
+            <button class="filter-btn" onclick="filterTuman('qarshi')">Qarshi</button>
+            <button class="filter-btn" onclick="filterTuman('shahrisabz')">Shahrisabz</button>
+            <button class="filter-btn" onclick="filterTuman('kitob')">Kitob</button>
+            <button class="filter-btn" onclick="filterTuman('koson')">Koson</button>
+            <button class="filter-btn" onclick="filterTuman('muborak')">Muborak</button>
+            <button class="filter-btn" onclick="filterTuman('chiroqchi')">Chiroqchi</button>
+        </div>
+
+        <!-- Mahallalar grid -->
+        <div class="mahallalar-grid" id="mahallalarGrid">
+            <!-- Qarshi shahri -->
+            <div class="mahalla-card" data-tuman="qarshi" onclick="location.href='/qashqadaryo/mahalla/bogiston'">
+                <div class="mahalla-nomi">🌳 Bog'iston MFY</div>
+                <div class="mahalla-info">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <span>Qarshi shahri, Mustaqillik ko'chasi 15</span>
+                </div>
+                <div class="mahalla-info">
+                    <i class="fas fa-user-tie"></i>
+                    <span>Rais: Karimov Alisher</span>
+                </div>
+                <div class="mahalla-info">
+                    <i class="fas fa-phone"></i>
+                    <span>+998 75 221 34 56</span>
+                </div>
+                <div style="margin-top: 15px;">
+                    <span class="badge"><i class="fas fa-users me-1"></i>2,500 aholi</span>
+                    <span class="badge"><i class="fas fa-home me-1"></i>520 uy</span>
+                </div>
+            </div>
+
+            <div class="mahalla-card" data-tuman="qarshi" onclick="location.href='/qashqadaryo/mahalla/guliston'">
+                <div class="mahalla-nomi">🌲 Guliston MFY</div>
+                <div class="mahalla-info">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <span>Qarshi shahri, Navoiy ko'chasi 8</span>
+                </div>
+                <div class="mahalla-info">
+                    <i class="fas fa-user-tie"></i>
+                    <span>Rais: Ahmedov Botir</span>
+                </div>
+                <div class="mahalla-info">
+                    <i class="fas fa-phone"></i>
+                    <span>+998 75 223 45 67</span>
+                </div>
+                <div style="margin-top: 15px;">
+                    <span class="badge"><i class="fas fa-users me-1"></i>3,200 aholi</span>
+                    <span class="badge"><i class="fas fa-home me-1"></i>680 uy</span>
+                </div>
+            </div>
+
+            <div class="mahalla-card" data-tuman="qarshi" onclick="location.href='/qashqadaryo/mahalla/tinchlik'">
+                <div class="mahalla-nomi">🕊️ Tinchlik MFY</div>
+                <div class="mahalla-info">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <span>Qarshi tumani, Markaziy ko'cha 1</span>
+                </div>
+                <div class="mahalla-info">
+                    <i class="fas fa-user-tie"></i>
+                    <span>Rais: Tursunov Kamol</span>
+                </div>
+                <div class="mahalla-info">
+                    <i class="fas fa-phone"></i>
+                    <span>+998 75 224 56 78</span>
+                </div>
+                <div style="margin-top: 15px;">
+                    <span class="badge"><i class="fas fa-users me-1"></i>2,800 aholi</span>
+                    <span class="badge"><i class="fas fa-home me-1"></i>590 uy</span>
+                </div>
+            </div>
+
+            <!-- Shahrisabz -->
+            <div class="mahalla-card" data-tuman="shahrisabz" onclick="location.href='/qashqadaryo/mahalla/dostlik'">
+                <div class="mahalla-nomi">🤝 Do'stlik MFY</div>
+                <div class="mahalla-info">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <span>Shahrisabz shahri, Amir Temur ko'chasi 23</span>
+                </div>
+                <div class="mahalla-info">
+                    <i class="fas fa-user-tie"></i>
+                    <span>Rais: Rahimov Dilshod</span>
+                </div>
+                <div class="mahalla-info">
+                    <i class="fas fa-phone"></i>
+                    <span>+998 75 225 67 89</span>
+                </div>
+                <div style="margin-top: 15px;">
+                    <span class="badge"><i class="fas fa-users me-1"></i>3,000 aholi</span>
+                    <span class="badge"><i class="fas fa-home me-1"></i>620 uy</span>
+                </div>
+            </div>
+
+            <div class="mahalla-card" data-tuman="shahrisabz" onclick="location.href='/qashqadaryo/mahalla/istiqlol'">
+                <div class="mahalla-nomi">⭐ Istiqlol MFY</div>
+                <div class="mahalla-info">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <span>Shahrisabz tumani, Mustaqillik ko'chasi 7</span>
+                </div>
+                <div class="mahalla-info">
+                    <i class="fas fa-user-tie"></i>
+                    <span>Rais: Xasanov Elyor</span>
+                </div>
+                <div class="mahalla-info">
+                    <i class="fas fa-phone"></i>
+                    <span>+998 75 226 78 90</span>
+                </div>
+                <div style="margin-top: 15px;">
+                    <span class="badge"><i class="fas fa-users me-1"></i>2,700 aholi</span>
+                    <span class="badge"><i class="fas fa-home me-1"></i>550 uy</span>
+                </div>
+            </div>
+
+            <!-- Kitob -->
+            <div class="mahalla-card" data-tuman="kitob" onclick="location.href='/qashqadaryo/mahalla/navbahor'">
+                <div class="mahalla-nomi">🌸 Navbahor MFY</div>
+                <div class="mahalla-info">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <span>Kitob tumani, Bog' ko'chasi 12</span>
+                </div>
+                <div class="mahalla-info">
+                    <i class="fas fa-user-tie"></i>
+                    <span>Rais: Sodiqov Farhod</span>
+                </div>
+                <div class="mahalla-info">
+                    <i class="fas fa-phone"></i>
+                    <span>+998 75 227 89 01</span>
+                </div>
+                <div style="margin-top: 15px;">
+                    <span class="badge"><i class="fas fa-users me-1"></i>2,900 aholi</span>
+                    <span class="badge"><i class="fas fa-home me-1"></i>610 uy</span>
+                </div>
+            </div>
+
+            <div class="mahalla-card" data-tuman="kitob" onclick="location.href='/qashqadaryo/mahalla/yangi-hayot'">
+                <div class="mahalla-nomi">🌅 Yangi hayot MFY</div>
+                <div class="mahalla-info">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <span>Kitob tumani, Markaziy ko'cha 3</span>
+                </div>
+                <div class="mahalla-info">
+                    <i class="fas fa-user-tie"></i>
+                    <span>Rais: Nurmatov Jasur</span>
+                </div>
+                <div class="mahalla-info">
+                    <i class="fas fa-phone"></i>
+                    <span>+998 75 228 90 12</span>
+                </div>
+                <div style="margin-top: 15px;">
+                    <span class="badge"><i class="fas fa-users me-1"></i>2,600 aholi</span>
+                    <span class="badge"><i class="fas fa-home me-1"></i>540 uy</span>
+                </div>
+            </div>
+
+            <!-- Koson -->
+            <div class="mahalla-card" data-tuman="koson" onclick="location.href='/qashqadaryo/mahalla/paxtakor'">
+                <div class="mahalla-nomi">🌾 Paxtakor MFY</div>
+                <div class="mahalla-info">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <span>Koson tumani, Paxta ko'chasi 5</span>
+                </div>
+                <div class="mahalla-info">
+                    <i class="fas fa-user-tie"></i>
+                    <span>Rais: Jo'rayev Olim</span>
+                </div>
+                <div class="mahalla-info">
+                    <i class="fas fa-phone"></i>
+                    <span>+998 75 229 01 23</span>
+                </div>
+                <div style="margin-top: 15px;">
+                    <span class="badge"><i class="fas fa-users me-1"></i>3,100 aholi</span>
+                    <span class="badge"><i class="fas fa-home me-1"></i>650 uy</span>
+                </div>
+            </div>
+
+            <!-- Muborak -->
+            <div class="mahalla-card" data-tuman="muborak" onclick="location.href='/qashqadaryo/mahalla/neftchi'">
+                <div class="mahalla-nomi">🛢️ Neftchi MFY</div>
+                <div class="mahalla-info">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <span>Muborak tumani, Neftchilar ko'chasi 1</span>
+                </div>
+                <div class="mahalla-info">
+                    <i class="fas fa-user-tie"></i>
+                    <span>Rais: Abdullayev Shuhrat</span>
+                </div>
+                <div class="mahalla-info">
+                    <i class="fas fa-phone"></i>
+                    <span>+998 75 230 12 34</span>
+                </div>
+                <div style="margin-top: 15px;">
+                    <span class="badge"><i class="fas fa-users me-1"></i>2,400 aholi</span>
+                    <span class="badge"><i class="fas fa-home me-1"></i>500 uy</span>
+                </div>
+            </div>
+
+            <!-- Chiroqchi -->
+            <div class="mahalla-card" data-tuman="chiroqchi" onclick="location.href='/qashqadaryo/mahalla/chiroqchi-markaz'">
+                <div class="mahalla-nomi">🕌 Chiroqchi markaz MFY</div>
+                <div class="mahalla-info">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <span>Chiroqchi tumani, Markaziy ko'cha 10</span>
+                </div>
+                <div class="mahalla-info">
+                    <i class="fas fa-user-tie"></i>
+                    <span>Rais: Qurbonov Akmal</span>
+                </div>
+                <div class="mahalla-info">
+                    <i class="fas fa-phone"></i>
+                    <span>+998 75 231 23 45</span>
+                </div>
+                <div style="margin-top: 15px;">
+                    <span class="badge"><i class="fas fa-users me-1"></i>2,800 aholi</span>
+                    <span class="badge"><i class="fas fa-home me-1"></i>580 uy</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pagination -->
+        <div class="pagination">
+            <a href="#" class="page-btn active">1</a>
+            <a href="#" class="page-btn">2</a>
+            <a href="#" class="page-btn">3</a>
+            <a href="#" class="page-btn">4</a>
+            <a href="#" class="page-btn">5</a>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p><i class="fas fa-map-marked-alt me-2"></i> Qashqadaryo Mahallalari © 2024</p>
+            <p class="mt-2">Barcha huquqlar himoyalangan</p>
+        </div>
+    </footer>
+
+    <script>
+        function filterTuman(tuman) {
+            // Filter tugmalarini yangilash
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // Mahallalarni filterlash
+            const cards = document.querySelectorAll('.mahalla-card');
+            
+            if (tuman === 'all') {
+                cards.forEach(card => card.style.display = 'block');
+            } else {
+                cards.forEach(card => {
+                    if (card.dataset.tuman === tuman) {
+                        card.style.display = 'block';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,7 @@
+<h1>24/7 Xizmatlar</h1>
+<ul>
+<% xizmatlar.forEach(x => { %>
+    <li><b><%= x.nomi %></b> - <%= x.telefon %> (<%= x.ish_vaqti %>)</li>
+<% }); %>
+</ul>
+<a href="/qashqadaryo">Orqaga</a>

@@ -1,0 +1,28 @@
+const express = require('express');
+const router = express.Router();
+
+// Muammolar ro'yxati
+router.get('/', (req, res) => {
+    res.send(`
+        <h1>📋 Muammolar ro'yxati</h1>
+        <a href="/problems/new">Yangi muammo</a><br>
+        <a href="/">Bosh sahifa</a>
+    `);
+});
+
+// Yangi muammo formasi
+router.get('/new', (req, res) => {
+    res.render('problems/new');
+});
+
+// Yangi muammo qo'shish
+router.post('/', (req, res) => {
+    console.log('Yangi muammo:', req.body);
+    res.send(`
+        <h2>✅ Muammo qabul qilindi!</h2>
+        <p>Rahmat! Tez orada ko'rib chiqamiz.</p>
+        <a href="/">Bosh sahifa</a> | <a href="/problems">Muammolar</a>
+    `);
+});
+
+module.exports = router;

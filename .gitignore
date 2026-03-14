@@ -1,0 +1,10 @@
+node_modules/
+.env
+.DS_Store
+uploads/
+backup/
+console.log('✅
+{
+.git/
+.dockerignore
+Dockerfile
