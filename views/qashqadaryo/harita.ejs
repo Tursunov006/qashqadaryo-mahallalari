@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Qashqadaryo Xaritasi</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        
+        .header h1 {
+            font-size: 32px;
+            color: #667eea;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .header-icon {
+            font-size: 40px;
+        }
+        
+        .back-btn {
+            background: #667eea;
+            color: white;
+            padding: 12px 25px;
+            border-radius: 8px;
+            text-decoration: none;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 600;
+        }
+        
+        .back-btn:hover {
+            background: #764ba2;
+            transform: translateX(-5px);
+        }
+        
+        .map-section {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+        
+        #map {
+            width: 100%;
+            height: 600px;
+            background: #e0e0e0;
+        }
+        
+        .legend {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+        
+        .legend h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 24px;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+        }
+        
+        .legend-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            background: #f8f9ff;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+        
+        .legend-item-icon {
+            width: 35px;
+            height: 35px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+        
+        .legend-item-info h3 {
+            color: #667eea;
+            font-size: 15px;
+            margin-bottom: 3px;
+        }
+        
+        .legend-item-info p {
+            color: #666;
+            font-size: 13px;
+        }
+        
+        .info-box {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        .info-box h2 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 20px;
+        }
+        
+        .info-box p {
+            color: #666;
+            line-height: 1.8;
+            margin-bottom: 10px;
+        }
+        
+        .leaflet-popup-content-wrapper {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .leaflet-popup-content {
+            margin: 13px 19px;
+            color: #333;
+        }
+        
+        .leaflet-popup-content h3 {
+            color: #667eea;
+            margin-bottom: 8px;
+            margin-top: 0;
+        }
+        
+        .leaflet-popup-content p {
+            margin: 5px 0;
+            font-size: 13px;
+            color: #666;
+        }
+        
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+            }
+            
+            .header h1 {
+                font-size: 24px;
+            }
+            
+            #map {
+                height: 400px;
+            }
+            
+            .legend-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: white;
+            font-size: 14px;
+            margin-top: 40px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>
+                <i class="fas fa-map header-icon"></i>
+                Qashqadaryo Xaritasi
+            </h1>
+            <a href="/qashqadaryo/" class="back-btn">
+                <i class="fas fa-arrow-left"></i>
+                Orqaga
+            </a>
+        </div>
+
+        <div class="map-section">
+            <div id="map"></div>
+        </div>
+
+        <div class="legend">
+            <h2><i class="fas fa-info-circle"></i> Tumanlar</h2>
+            <div class="legend-grid">
+                <div class="legend-item">
+                    <div class="legend-item-icon">
+                        <i class="fas fa-map-pin"></i>
+                    </div>
+                    <div class="legend-item-info">
+                        <h3>14 ta Tuman</h3>
+                        <p>Qashqadaryo viloyatining barcha tumanlari</p>
+                    </div>
+                </div>
+                
+                <div class="legend-item">
+                    <div class="legend-item-icon">
+                        <i class="fas fa-city"></i>
+                    </div>
+                    <div class="legend-item-info">
+                        <h3>2 ta Shahar</h3>
+                        <p>Qarshi va Shahrisabz shaharlar</p>
+                    </div>
+                </div>
+                
+                <div class="legend-item">
+                    <div class="legend-item-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="legend-item-info">
+                        <h3>3.6 Million Aholi</h3>
+                        <p>Qashqadaryo viloyatining umumiy aholisi</p>
+                    </div>
+                </div>
+                
+                <div class="legend-item">
+                    <div class="legend-item-icon">
+                        <i class="fas fa-home"></i>
+                    </div>
+                    <div class="legend-item-info">
+                        <h3>147 ta Mahalla</h3>
+                        <p>Qishloq fuqarolari yig'inlari</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="info-box">
+            <h2><i class="fas fa-info-circle"></i> Harita Haqida</h2>
+            <p>
+                Bu interaktiv xarita Qashqadaryo viloyatining 14 ta tumanlarini va ularning joylashuvini ko'rsatadi. 
+                Xaritadagi markerlarni bosib, har bir tuman haqida to'liq ma'lumot olishingiz mumkin.
+            </p>
+            <p>
+                Xarita Leaflet.js kutubxonasi yordamida yaratilgan bo'lib, zoom va scroll qilish mumkin. 
+                Har bir marker tuman nomini, mahallalar sonini va boshqa muhim ma'lumotlarni ko'rsatadi.
+            </p>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>&copy; 2026 Qashqadaryo Viloyati Direktoryasi | Barcha huquqlar himoyalangan</p>
+    </div>
+
+    <script>
+        // Xarita markazini belgilash (Qarshi shahri)
+        const mapCenter = [38.2667, 65.3667];
+        
+        // Xarita yaratish
+        const map = L.map('map').setView(mapCenter, 8);
+        
+        // OpenStreetMap tile qo'shish
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors',
+            maxZoom: 19
+        }).addTo(map);
+        
+        // Tumanlar ma'lumoti (latitude, longitude, nomi, mahallalar)
+        const tumanlar = [
+            { lat: 38.2667, lng: 65.3667, nomi: 'Qarshi tumani', mahallalar: 5, icon: '🏘️' },
+            { lat: 37.5, lng: 66.7667, nomi: 'Shahrisabz tumani', mahallalar: 8, icon: '🏛️' },
+            { lat: 37.7333, lng: 66.1, nomi: 'Kitob tumani', mahallalar: 8, icon: '📚' },
+            { lat: 38.7, lng: 64.6, nomi: 'Koson tumani', mahallalar: 9, icon: '🏜️' },
+            { lat: 38.3, lng: 64.2, nomi: 'Nishon tumani', mahallalar: 8, icon: '🏞️' },
+            { lat: 37.9, lng: 65.2, nomi: 'Mirishkor tumani', mahallalar: 10, icon: '🌅' },
+            { lat: 38.1, lng: 65.8, nomi: 'Kasbi tumani', mahallalar: 13, icon: '🏺' },
+            { lat: 37.6, lng: 64.9, nomi: 'Dehqonobod tumani', mahallalar: 7, icon: '🌾' },
+            { lat: 38.5, lng: 65.7, nomi: 'Yakkabog\' tumani', mahallalar: 5, icon: '🌳' },
+            { lat: 37.8, lng: 65.5, nomi: 'Chiroqchi tumani', mahallalar: 4, icon: '🕌' },
+            { lat: 37.4, lng: 65.3, nomi: 'Guzor tumani', mahallalar: 4, icon: '🏔️' },
+            { lat: 38.6, lng: 64.8, nomi: 'Qamashi tumani', mahallalar: 3, icon: '🏙️' },
+            { lat: 37.3, lng: 65.8, nomi: 'Muborak tumani', mahallalar: 3, icon: '🛢️' },
+            { lat: 38.8, lng: 65.1, nomi: 'Kokdala tumani', mahallalar: 3, icon: '💧' }
+        ];
+        
+        // Custom icon yaratish
+        function createCustomIcon(emoji) {
+            return L.divIcon({
+                html: `<div style="
+                    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                    width: 40px;
+                    height: 40px;
+                    border-radius: 50%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-size: 24px;
+                    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+                    border: 3px solid white;
+                ">${emoji}</div>`,
+                iconSize: [40, 40],
+                className: 'custom-icon'
+            });
+        }
+        
+        // Markerlarni xaritaga qo'shish
+        tumanlar.forEach(function(tuman) {
+            const marker = L.marker([tuman.lat, tuman.lng], {
+                icon: createCustomIcon(tuman.icon)
+            }).addTo(map);
+            
+            marker.bindPopup(`
+                <div style="text-align: center;">
+                    <h3>${tuman.nomi}</h3>
+                    <p><strong>Mahallalar:</strong> ${tuman.mahallalar} ta</p>
+                    <p style="font-size: 12px; color: #999;">Bosing: tola ma'lumot</p>
+                </div>
+            `);
+        });
+        
+        // Viloyat chegarasini chizish (taxminan)
+        const viloyatBounds = L.polyline([
+            [38.9, 66.5],
+            [38.5, 66.8],
+            [38.2, 66.5],
+            [37.2, 66.3],
+            [37.0, 65.0],
+            [37.1, 64.0],
+            [37.9, 63.8],
+            [38.8, 64.2],
+            [39.0, 64.8],
+            [38.9, 66.5]
+        ], {
+            color: '#667eea',
+            weight: 3,
+            opacity: 0.4,
+            dashArray: '5, 5'
+        }).addTo(map);
+        
+        // Markaziy nuqtaga marker qo'shish (Qarshi shahri)
+        L.circleMarker([38.2667, 65.3667], {
+            radius: 8,
+            fillColor: '#764ba2',
+            color: '#667eea',
+            weight: 3,
+            opacity: 1,
+            fillOpacity: 0.8
+        }).addTo(map).bindPopup(`
+            <div style="text-align: center;">
+                <h3>🏛️ Qarshi Shahri</h3>
+                <p><strong>Viloyat Markazi</strong></p>
+            </div>
+        `);
+    </script>
+</body>
+</html>

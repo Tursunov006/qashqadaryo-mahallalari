@@ -149,6 +149,11 @@ router.get('/viloyat', (req, res) => {
     res.render('qashqadaryo/viloyat');
 });
 
+// Xarita
+router.get('/harita', (req, res) => {
+    res.render('qashqadaryo/harita');
+});
+
 // Barcha mahallalar ro'yxati
 router.get('/mahallalar', (req, res) => {
     res.render('qashqadaryo/mahallalar');
