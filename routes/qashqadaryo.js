@@ -144,6 +144,11 @@ router.get('/', (req, res) => {
     res.render('qashqadaryo/index', { tumanlar });
 });
 
+// Viloyat haqida
+router.get('/viloyat', (req, res) => {
+    res.render('qashqadaryo/viloyat');
+});
+
 // Barcha mahallalar ro'yxati
 router.get('/mahallalar', (req, res) => {
     res.render('qashqadaryo/mahallalar');
